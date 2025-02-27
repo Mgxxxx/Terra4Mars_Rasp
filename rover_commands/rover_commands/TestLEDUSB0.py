@@ -4,7 +4,7 @@ import time
 #test
 def main():
     # Set up the serial connection to the Arduino
-    ser = serial.Serial('/dev/ttyS0', 9600, timeout=1)  # Adjust '/dev/ttyUSB0' to your serial port
+    ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)  # Adjust '/dev/ttyUSB0' to your serial port
     time.sleep(2)  # Allow time for the Arduino to reset
     c = 0
 

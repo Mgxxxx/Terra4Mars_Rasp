@@ -21,7 +21,7 @@ def input_thread_fn(state, lock):
     """
     while True:
         try:
-            raw = input("New joystick x,y (e.g. 0.3 -0.7) or Ctrl-C to quit: ")
+            raw = input("New joystick x,y or Ctrl-C to quit: ")
         except EOFError:
             break
         parts = raw.strip().split()

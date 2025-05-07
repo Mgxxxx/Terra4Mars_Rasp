@@ -24,8 +24,8 @@ def main():
     try:
         while True:
 
-            x = int(input("Joystick x axis : "))
-            y = int(input("Joystick y axis : "))
+            x = int(input("Joystick x axis (-1.0 to 1.0): "))
+            y = int(input("Joystick y axis (-1.0 to 1.0): "))
 
             # Direction: 0 = forward, 1 = backward
             direction = 0 if y >= 0 else 1
@@ -37,7 +37,6 @@ def main():
             # Servo: scale x (-1 to 1) to 0–255
             servo_angle = map_range(x, -1, 1, 0, 255)
             
-            update_position(wheel_speeds, servo_angle)
             send_rover_command(ser, direction, wheel_speeds, servo_angle)
             time.sleep(0.1)
     except KeyboardInterrupt:

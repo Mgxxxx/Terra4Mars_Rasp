@@ -1,6 +1,5 @@
 import serial
 import time
-from utils import update_position
 
 # Utility to map joystick input to value range
 def map_range(value, in_min, in_max, out_min, out_max):

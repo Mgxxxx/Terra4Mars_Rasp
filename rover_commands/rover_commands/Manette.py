@@ -1,7 +1,7 @@
 import serial
 import time
 import pygame
-from rover_commands.rover_commands.utils import update_position
+from rover_commands.rover_commands.utils.utils import update_position
 
 # Utility to map joystick input to value range
 def map_range(value, in_min, in_max, out_min, out_max):

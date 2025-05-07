@@ -36,9 +36,9 @@ def main():
 
             # Servo: scale x (-1 to 1) to 0–255
             servo_angle = map_range(x, -1, 1, 0, 255)
-
-            send_rover_command(ser, direction, wheel_speeds, servo_angle)
+            
             update_position(wheel_speeds, servo_angle)
+            send_rover_command(ser, direction, wheel_speeds, servo_angle)
             time.sleep(0.1)
     except KeyboardInterrupt:
         print("Exiting...")

@@ -1,5 +1,6 @@
 import serial
 import time
+from rover_commands.rover_commands.utils import update_position
 
 def send_rover_command(ser, direction, wheel_speeds, servo_angle):
     if direction not in [0, 1]:
@@ -30,6 +31,7 @@ def main():
             servo_angle = int(input("Servo angle (0–255): "))
 
             send_rover_command(ser, direction, wheel_speeds, servo_angle)
+            update_position(wheel_speeds, servo_angle)
             time.sleep(0.1)
     except KeyboardInterrupt:
         print("Exiting...")

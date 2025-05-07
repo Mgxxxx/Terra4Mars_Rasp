@@ -1,6 +1,7 @@
 import serial
 import time
-from utils import update_position
+import pygame
+from rover_commands.rover_commands.utils import update_position
 
 # Utility to map joystick input to value range
 def map_range(value, in_min, in_max, out_min, out_max):
@@ -16,6 +17,15 @@ def send_rover_command(ser, direction, wheel_speeds, servo_angle):
     print(f"Sent: {[hex(b) for b in data]}")
 
 def main():
+    # Initialize joystick
+    pygame.init()
+    pygame.joystick.init()
+    if pygame.joystick.get_count() == 0:
+        print("No joystick detected.")
+        return
+
+    joystick = pygame.joystick.Joystick(0)
+    joystick.init()
 
     # Initialize serial
     ser = serial.Serial('/dev/pts/1', 9600, timeout=1)
@@ -23,9 +33,10 @@ def main():
 
     try:
         while True:
+            pygame.event.pump()
 
-            x = int(input("Joystick x axis : "))
-            y = int(input("Joystick y axis : "))
+            x = joystick.get_axis(0)  # Left-right
+            y = -joystick.get_axis(1)  # Forward-backward (invert Y)
 
             # Direction: 0 = forward, 1 = backward
             direction = 0 if y >= 0 else 1
@@ -43,6 +54,8 @@ def main():
     except KeyboardInterrupt:
         print("Exiting...")
     finally:
+        joystick.quit()
+        pygame.quit()
         ser.close()
 
 if __name__ == "__main__":

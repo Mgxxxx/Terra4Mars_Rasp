@@ -87,6 +87,7 @@ def main():
             left_speed = max(0, min(127, left_speed))
             right_speed = max(0, min(127, right_speed))
             wheel_speeds = [left_speed, right_speed, left_speed, right_speed]
+            wheel_speeds += direction*255
 
             # Servo angle based on x input
             servo_angle = map_range(x, -1, 1, 0, 255)

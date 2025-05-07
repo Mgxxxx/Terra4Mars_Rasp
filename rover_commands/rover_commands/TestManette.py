@@ -17,7 +17,7 @@ def send_rover_command(ser, direction, wheel_speeds, servo_angle):
 def main():
 
     # Initialize serial
-    ser = serial.Serial('/dev/pts/1', 9600, timeout=1)
+    ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
     time.sleep(2)
 
     try:

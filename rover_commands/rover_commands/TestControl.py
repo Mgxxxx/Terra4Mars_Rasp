@@ -19,7 +19,7 @@ def send_rover_command(ser, direction, wheel_speeds, servo_angle):
     print(f"Sent bytes: {[hex(b) for b in data]}")
 
 def main():
-    ser = serial.Serial('/dev/pts/1', 9600, timeout=1)
+    ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
     time.sleep(2)  # Wait for Arduino to reset
 
     try:

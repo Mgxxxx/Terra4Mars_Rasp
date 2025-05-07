@@ -14,55 +14,58 @@ def send_rover_command(ser, direction, wheel_speeds, servo_angle):
     ser.write(data)
     print(f"Sent: {[hex(b) for b in data]}")
 
+import threading
+
+def get_input_thread(shared_input):
+    while True:
+        user = input("\nType anything and press Enter to update joystick values: ")
+        shared_input["update"] = True
+
 def main():
-    # Initialize serial
     ser = serial.Serial('/dev/pts/1', 9600, timeout=1)
     time.sleep(2)
 
-    # Default joystick values
     x, y = 0.0, 0.0
+    shared_input = {"update": True}
+
+    # Start background thread to listen for input
+    input_thread = threading.Thread(target=get_input_thread, args=(shared_input,), daemon=True)
+    input_thread.start()
 
     try:
         while True:
-            # Prompt for new input (optional)
-            print("\n--- Update Joystick ---")
-            print("Press Enter to keep current joystick values.")
-            user_input = input(f"Joystick x axis (-1.0 to 1.0) [current: {x}]: ")
-            if user_input.strip() != "":
-                x = float(user_input)
-                x = max(-1.0, min(1.0, x))
+            if shared_input["update"]:
+                print("\n--- Update Joystick ---")
+                user_input = input(f"Joystick x axis (-1.0 to 1.0) [current: {x}]: ")
+                if user_input.strip() != "":
+                    x = float(user_input)
+                    x = max(-1.0, min(1.0, x))
 
-            user_input = input(f"Joystick y axis (-1.0 to 1.0) [current: {y}]: ")
-            if user_input.strip() != "":
-                y = float(user_input)
-                y = max(-1.0, min(1.0, y))
+                user_input = input(f"Joystick y axis (-1.0 to 1.0) [current: {y}]: ")
+                if user_input.strip() != "":
+                    y = float(user_input)
+                    y = max(-1.0, min(1.0, y))
 
-            # Keep sending current values until user wants to change them
-            print("Sending current joystick state repeatedly... (Ctrl+C to interrupt)")
-            while True:
-                direction = 0 if y >= 0 else 1
-                speed = map_range(abs(y), 0, 1, 0, 127)
+                shared_input["update"] = False
 
-                # Turning logic
-                turn_scale = 0.5
-                left_factor = 1.0 - turn_scale * x
-                right_factor = 1.0 + turn_scale * x
-                left_factor = max(0.0, min(1.5, left_factor))
-                right_factor = max(0.0, min(1.5, right_factor))
-                left_speed = int(speed * left_factor)
-                right_speed = int(speed * right_factor)
-                left_speed = max(0, min(127, left_speed))
-                right_speed = max(0, min(127, right_speed))
-                wheel_speeds = [left_speed, right_speed, left_speed, right_speed]
+            direction = 0 if y >= 0 else 1
+            speed = map_range(abs(y), 0, 1, 0, 127)
 
-                servo_angle = map_range(x, -1, 1, 0, 255)
+            turn_scale = 0.5
+            left_factor = 1.0 - turn_scale * x
+            right_factor = 1.0 + turn_scale * x
+            left_factor = max(0.0, min(1.5, left_factor))
+            right_factor = max(0.0, min(1.5, right_factor))
+            left_speed = int(speed * left_factor)
+            right_speed = int(speed * right_factor)
+            left_speed = max(0, min(127, left_speed))
+            right_speed = max(0, min(127, right_speed))
+            wheel_speeds = [left_speed, right_speed, left_speed, right_speed]
 
-                send_rover_command(ser, direction, wheel_speeds, servo_angle)
-                time.sleep(0.1)
+            servo_angle = map_range(x, -1, 1, 0, 255)
 
-                # Check if the user wants to break the loop to enter new values
-                if ser.in_waiting:
-                    break  # optional: add a way to signal exit
+            send_rover_command(ser, direction, wheel_speeds, servo_angle)
+            time.sleep(0.1)
     except KeyboardInterrupt:
         print("\nExiting...")
     finally:

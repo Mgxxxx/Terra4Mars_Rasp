@@ -1,5 +1,6 @@
 import serial
 import time
+import threading
 
 # Utility to map joystick input to value range
 def map_range(value, in_min, in_max, out_min, out_max):
@@ -14,19 +15,18 @@ def send_rover_command(ser, direction, wheel_speeds, servo_angle):
     ser.write(data)
     print(f"Sent: {[hex(b) for b in data]}")
 
-import threading
 
 def get_input_thread(shared_input):
     while True:
         user = input("\nType anything and press Enter to update joystick values: ")
-        shared_input["update"] = True
+        shared_input = True
 
 def main():
     ser = serial.Serial('/dev/pts/1', 9600, timeout=1)
     time.sleep(2)
 
     x, y = 0.0, 0.0
-    shared_input = {"update": True}
+    shared_input = True
 
     # Start background thread to listen for input
     input_thread = threading.Thread(target=get_input_thread, args=(shared_input,), daemon=True)
@@ -34,7 +34,7 @@ def main():
 
     try:
         while True:
-            if shared_input["update"]:
+            if shared_input :
                 print("\n--- Update Joystick ---")
                 user_input = input(f"Joystick x axis (-1.0 to 1.0) [current: {x}]: ")
                 if user_input.strip() != "":
@@ -46,7 +46,7 @@ def main():
                     y = float(user_input)
                     y = max(-1.0, min(1.0, y))
 
-                shared_input["update"] = False
+                shared_input = False
 
             direction = 0 if y >= 0 else 1
             speed = map_range(abs(y), 0, 1, 0, 127)

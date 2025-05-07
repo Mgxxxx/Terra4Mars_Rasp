@@ -23,20 +23,29 @@ def main():
 
     try:
         while True:
+            x = float(input("Joystick x axis (-1.0 to 1.0): "))
+            y = float(input("Joystick y axis (-1.0 to 1.0): "))
+            x = max(-1.0, min(1.0, x))
+            y = max(-1.0, min(1.0, y))
 
-            x = int(input("Joystick x axis (-1.0 to 1.0): "))
-            y = int(input("Joystick y axis (-1.0 to 1.0): "))
-
-            # Direction: 0 = forward, 1 = backward
             direction = 0 if y >= 0 else 1
-
-            # Speed: scale |y| from 0-1 to 0-127
             speed = map_range(abs(y), 0, 1, 0, 127)
-            wheel_speeds = [speed] * 4  # Uniform speed
 
-            # Servo: scale x (-1 to 1) to 0–255
+            # Turning logic
+            turn_scale = 0.5  # Adjust to control turning aggressiveness
+            left_factor = 1.0 - turn_scale * x
+            right_factor = 1.0 + turn_scale * x
+            left_factor = max(0.0, min(1.5, left_factor))
+            right_factor = max(0.0, min(1.5, right_factor))
+            left_speed = int(speed * left_factor)
+            right_speed = int(speed * right_factor)
+            left_speed = max(0, min(127, left_speed))
+            right_speed = max(0, min(127, right_speed))
+            wheel_speeds = [left_speed, right_speed, left_speed, right_speed]
+
+            # Servo angle based on x input
             servo_angle = map_range(x, -1, 1, 0, 255)
-            
+
             send_rover_command(ser, direction, wheel_speeds, servo_angle)
             time.sleep(0.1)
     except KeyboardInterrupt:

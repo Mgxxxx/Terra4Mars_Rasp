@@ -9,7 +9,6 @@ def map_range(value, in_min, in_max, out_min, out_max):
 def send_rover_command(ser, direction, wheel_speeds, servo_angle):
     data = bytearray()
     data.append(255)  # Start marker: ASCII '1'
-    data.append(direction)
     data.extend(wheel_speeds)
     data.append(servo_angle)
     ser.write(data)

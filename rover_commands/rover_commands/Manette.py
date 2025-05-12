@@ -1,6 +1,8 @@
 import serial
 import time
 import threading
+import os
+os.environ["SDL_VIDEODRIVER"] = "dummy"
 import pygame
 
 # Utility to map joystick input to value range

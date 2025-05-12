@@ -68,7 +68,7 @@ def main():
     t.start()
 
     # Initialize serial
-    ser = serial.Serial('/dev/pts/1', 9600, timeout=1)
+    ser = serial.Serial('/dev/pts/2', 9600, timeout=1)
     time.sleep(2)
 
     try:

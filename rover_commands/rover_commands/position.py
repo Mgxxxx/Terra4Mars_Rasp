@@ -3,7 +3,7 @@ import time
 import math
 
 # Config
-SERIAL_PORT = '/dev/pts/2'  # opposite of the sender port
+SERIAL_PORT = '/dev/pts/3'  # opposite of the sender port
 MAX_SPEED = 0.3  # meters/sec
 SERVO_MIN_DEG = -30
 SERVO_MAX_DEG = 30

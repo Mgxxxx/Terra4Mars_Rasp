@@ -1,5 +1,6 @@
 import serial
 import time
+import pygame
 
 # Utility to map joystick input to value range
 def map_range(value, in_min, in_max, out_min, out_max):
@@ -14,6 +15,16 @@ def send_rover_command(ser, direction, wheel_speeds, servo_angle):
     print(f"Sent: {[hex(b) for b in data]}")
 
 def main():
+    # Initialize joystick
+    pygame.init()
+    pygame.joystick.init()
+    if pygame.joystick.get_count() == 0:
+        print("No joystick detected.")
+        return
+
+    joystick = pygame.joystick.Joystick(0)
+    joystick.init()
+    
 
     # Initialize serial
     ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)

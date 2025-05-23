@@ -2,7 +2,7 @@ import socket
 import serial
 
 # Serial to your rover
-SERIAL_PORT = "/dev/ttyUSB0"
+SERIAL_PORT = "/dev/pts/2"
 BAUDRATE    = 9600
 
 # Network listener

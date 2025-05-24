@@ -37,7 +37,7 @@ try:
         direction = 0 if raw_y >= 0 else 1
         speed     = map_range(abs(raw_y), 0, 1, 0, 127)
 
-        turn_scale = 0.5
+        turn_scale = 0.6
         lf = max(0, min(1.5, 1 - turn_scale * raw_x))
         rf = max(0, min(1.5, 1 + turn_scale * raw_x))
 

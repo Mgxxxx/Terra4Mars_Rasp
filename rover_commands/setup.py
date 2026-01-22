@@ -1,27 +1,24 @@
 from setuptools import find_packages, setup
 
-package_name = 'rover_commands'
-
 setup(
-    name=package_name,
-    version='0.0.0',
-    packages=find_packages(exclude=['test']),
-    data_files=[
-        ('share/ament_index/resource_index/packages',
-            ['resource/' + package_name]),
-        ('share/' + package_name, ['package.xml']),
+    name="rover_commands",
+    version="1.0.0",
+    packages=find_packages(exclude=["test"]),
+    install_requires=[
+        "setuptools",
+        "pyserial",
+        "pygame",
     ],
-    install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='xplore',
-    maintainer_email='xplore@todo.todo',
-    description='TODO: Package description',
-    license='TODO: License declaration',
-    tests_require=['pytest'],
+    maintainer="EPFL Xplore",
+    maintainer_email="software@epfl-xplore.ch",
+    description="PS4 controller interface for Terra4Mars rover",
+    license="MIT",
     entry_points={
-     'console_scripts': [
-        'publisher = rover_commands.publisher:main',
-        'subscriber = rover_commands.subscriber:main',
-    ],
-},
+        "console_scripts": [
+            "controller = rover_commands.controller:main",
+            "sender = host.sender:main",
+            "receiver = raspberry.receiver:main",
+        ],
+    },
 )

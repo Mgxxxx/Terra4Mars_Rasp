@@ -100,7 +100,3 @@ Key parameters in each module:
 │   └── run.sh / run.bat
 └── README.md
 ```
-
-## License
-
-MIT
